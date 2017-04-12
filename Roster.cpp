@@ -329,11 +329,39 @@ bool	Roster::LoadMemberships(const string& fileName)
 			success = file.Read(fieldVector);
 			if (success)
 			{
-				//	COMPLETE THE ROSTER LOADING HERE.
+                StringVector Info;
+                
+                fieldVector[0] = id;
+                
+                fieldVector[1] = type;
+                if (type == "H" || "I")
+                {
+                    
+                }
+                else
+                {
+                    
+                }
+                
+                Info.push_back(type);
+                
+                fieldVector[2] = name;
+                Info.push_back(name);
+                
+                fieldVector[3] = line;
+                Info.push_back(line);
+                
+                // fieldVector[4] city;
+                
+                fieldVector[5] = state;
+                fieldVector[6] = zip;
+                
+                Families[id] = Info;
 			}
 			else
 			{
 				//	COMPLETE THE END-OF-FILE HANDLING HERE.
+                file.Close();
 				success = true;
 				break;
 			}

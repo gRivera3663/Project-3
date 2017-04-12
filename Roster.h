@@ -26,6 +26,8 @@ typedef string::size_type	StringSize;
 
 typedef vector<string>	StringVector;
 
+map<string, StringVector> Families;
+
 class	MembershipFile
 {
 	public:
