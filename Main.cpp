@@ -39,7 +39,6 @@ typedef vector<string>	StringVector;
 //****************************************************************************************
 static uint32_t	failureCount;
 
-
 static	StringVector	expectedFullRoster =
 {
 	"1000\tI\tJack Jones\t1200 South Central Ave\tSunset Dunes\tCA\t99456",
@@ -104,7 +103,7 @@ void	Test10(Roster& roster);
 
 string	VerifyRosterFile(const string& fileName, const StringVector& expectedText);
 
-bool	VerifyRosterText(const string& actualText, const StringVector& expectedText);
+bool	VerifyRosterText(const string& showText, const StringVector& expectedText);
 
 //****************************************************************************************
 //
@@ -366,7 +365,7 @@ void	Test6(Roster& roster)
 	success = roster.ShowOneMembership(stream, "2000");
 	if (success)
 	{
-		//	It shuold succedd' the id is known.
+		//	It shuold succeed; the id is known.
 		success = VerifyRosterText(stream.str(), expectedMember2000);
 		if (success)
 		{
@@ -407,7 +406,7 @@ void	Test7(Roster& roster)
 	cout << "Test 7: ShowOneMembership (after Load, unknown id)" << endl;
 	
 	//	Call the function being tested and check its return status.
-	success = roster.RemoveMembership("9999");
+	success = roster.ShowOneMembership(stream, "9999");
 	if (!success)
 	{
 		cout << "  Pass" << endl;
@@ -604,32 +603,13 @@ string	VerifyRosterFile(const string& fileName, const StringVector& expectedText
 		{
 			//	Get a file line and check for end-of-file.
 			//	Set indicator and leave loop.
-			success = file.Read(actualFieldVector);
+			success = file.Read(actualText);
 			if (!success)
 			{
 				endOfFile = true;
 				break;
 			}
 			
-			//	Form an actual text contiguous string,
-			//	because that's what's in the rows of
-			//	the expected text vector.
-			uint32_t i = 0;
-			actualText.erase();
-			while (true)
-			{
-				actualText += actualFieldVector[i];
-				++i;
-				if (i < actualFieldVector.size())
-				{
-					actualText += '\t';
-				}
-				else
-				{
-					break;
-				}
-			}
-
 			//	Compare actual and expected text.
 			//	On mismatch, set indicator and leave loop.
 			expectedText = expectedTextVector[lineIndex];
@@ -702,24 +682,50 @@ string	VerifyRosterFile(const string& fileName, const StringVector& expectedText
 //	Returns true if they match, false if they don't.
 //
 //****************************************************************************************
-bool	VerifyRosterText(const string& actualText, const StringVector& expectedTextVector)
+bool	VerifyRosterText(const string& showText, const StringVector& expectedTextVector)
 {
 	//************************************************************************************
 	//	LOCAL DATA
-	stringstream	stream;
+	string			actualText;
 	
 	string			expectedText;
+
+	uint32_t		i;
+
+	char			lastCharacter;
+	
+	stringstream	stream;
 	
 	//************************************************************************************
 	//	EXECUTABLE STATEMENTS
 	//	Form a stringstream from the expected text lines.
-	for (uint32_t i = 0; i < expectedTextVector.size(); ++i)
+	i = 0;
+	while (true)
 	{
-		stream << expectedTextVector[i] << endl;
+		stream << expectedTextVector[i];
+		++i;
+		if (i < expectedTextVector.size())
+		{
+			 stream << endl;
+		}
+		else
+		{
+			break;
+		}
 	}
 	
-	//	Get a single expected text string.
+	//	Get a single "expected text" string.
 	expectedText = stream.str();
+	
+	//	If the actual text ends with a newline, remove it;
+	//	it's not expected to have one it's not really an
+ 	//	error to have one, so it'll be ignored..
+	actualText = showText;
+	lastCharacter = actualText.back();
+	if ((lastCharacter == '\n') || (lastCharacter == '\r'))
+	{
+		actualText.pop_back();
+	}
 	
 	//	Compare the strings and return the appropriate status.
 	if (actualText == expectedText)
@@ -731,3 +737,22 @@ bool	VerifyRosterText(const string& actualText, const StringVector& expectedText
 		return(false);
 	}
 }
+
+#if 0
+//****************************************************************************************
+//
+//	Class::Function
+//
+//****************************************************************************************
+void	Class::Function()
+{
+	//************************************************************************************
+	//	LOCAL DATA
+
+	//************************************************************************************
+	//	EXECUTABLE STATEMENTS
+
+	return;
+}
+
+#endif
