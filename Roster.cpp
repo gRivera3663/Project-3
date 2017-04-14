@@ -331,44 +331,42 @@ bool	Roster::LoadMemberships(const string& fileName)
 			success = file.Read(fieldVector);
 			if (success)
 			{
-                //---------
                 StringVector UserInfo;
                 
-                id = fieldVector[0];
-                UserInfo[0] = id;
+                id = fieldVector[idIndex];
+                UserInfo[idIndex] = id;
                 
                 if (tempID == id)
                 {
-                    type = fieldVector[1];
+                    type = fieldVector[typeIndex];
+                    UserInfo[typeIndex] = type;
+                    
+                    name = fieldVector[nameIndex];
+                    UserInfo[nameIndex] = name;
+                    
+                }
+                else
+                {
+                    tempID = id;
+                
+                    type = fieldVector[typeIndex];
                     UserInfo[1] = type;
                     
                     name = fieldVector[2];
                     UserInfo[2] = name;
                     
-                    Families[id] = UserInfo;
+                    line = fieldVector[3] + " " + fieldVector[4]; // address + city
+                    UserInfo[3] = fieldVector[3]; // address
+                    UserInfo[4] = fieldVector[4]; // city
+                    
+                    state = fieldVector[5];
+                    UserInfo[5] = state;
+                    
+                    zip = fieldVector[6];
+                    UserInfo[6] = zip;
                 }
                 
-                tempID = id;
-                
-                type = fieldVector[1];
-                UserInfo[1] = type;
-                
-                name = fieldVector[2];
-                UserInfo[2] = name;
-                
-                line = fieldVector[3] + " " + fieldVector[4]; // address + city
-                UserInfo[3] = fieldVector[3]; // address
-                UserInfo[4] = fieldVector[4]; // city
-                
-                state = fieldVector[5];
-                UserInfo[5] = state;
-                
-                zip = fieldVector[6];
-                UserInfo[6] = zip;
-                
                 Families[id] = UserInfo;
-                
-                //----------
 			}
 			else
 			{
@@ -402,12 +400,19 @@ bool	Roster::RemoveMembership(const string& id)
 {
 	//************************************************************************************
 	//	LOCAL DATA
-
+    
 	//************************************************************************************
-	//	EXECUTABLE STATEMENTS
-	//	COMPLETE THE FUNCTION HERE. MAKE SURE IT RETURNS THE CORRECT STATUS EVERYWHERE.
-
-	return(true);
+	//	EXECUTABLE STATEMENTS    
+	if(Families.find(id) == Families.end())
+    {
+        cout << "Membership does not exist." << endl;
+        return(false);
+    }
+    else
+    {
+        Families.erase(id);
+        return(true);
+    }
 }
 
 //****************************************************************************************
