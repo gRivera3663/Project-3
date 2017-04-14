@@ -318,7 +318,9 @@ bool	Roster::LoadMemberships(const string& fileName)
 	string			type;
 	
 	string			zip;
-
+    
+    string          tempID; // added
+    
 	//************************************************************************************
 	//	EXECUTABLE STATEMENTS
 	success = file.Open(fileName);
@@ -329,34 +331,44 @@ bool	Roster::LoadMemberships(const string& fileName)
 			success = file.Read(fieldVector);
 			if (success)
 			{
-                StringVector Info;
+                //---------
+                StringVector UserInfo;
                 
-                fieldVector[0] = id;
+                id = fieldVector[0];
+                UserInfo[0] = id;
                 
-                fieldVector[1] = type;
-                if (type == "H" || "I")
+                if (tempID == id)
                 {
+                    type = fieldVector[1];
+                    UserInfo[1] = type;
                     
-                }
-                else
-                {
+                    name = fieldVector[2];
+                    UserInfo[2] = name;
                     
+                    Families[id] = UserInfo;
                 }
                 
-                Info.push_back(type);
+                tempID = id;
                 
-                fieldVector[2] = name;
-                Info.push_back(name);
+                type = fieldVector[1];
+                UserInfo[1] = type;
                 
-                fieldVector[3] = line;
-                Info.push_back(line);
+                name = fieldVector[2];
+                UserInfo[2] = name;
                 
-                // fieldVector[4] city;
+                line = fieldVector[3] + " " + fieldVector[4]; // address + city
+                UserInfo[3] = fieldVector[3]; // address
+                UserInfo[4] = fieldVector[4]; // city
                 
-                fieldVector[5] = state;
-                fieldVector[6] = zip;
+                state = fieldVector[5];
+                UserInfo[5] = state;
                 
-                Families[id] = Info;
+                zip = fieldVector[6];
+                UserInfo[6] = zip;
+                
+                Families[id] = UserInfo;
+                
+                //----------
 			}
 			else
 			{
