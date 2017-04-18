@@ -6,10 +6,9 @@
 #include	<fstream>
 #include	<iostream>
 
-#include	"Roster.h"
+#include    "Roster.h"
 
 using namespace std;
-
 //****************************************************************************************
 //
 //	CONSTANT DEFINITIONS
@@ -445,7 +444,7 @@ void	Roster::ShowAllMemberships(ostream& stream)
     }
     else
     {
-        stream << "Empty" << endl;
+        stream << "empty" << endl;
     }
 }
 
