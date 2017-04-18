@@ -470,7 +470,7 @@ void	Test8(Roster& roster)
 //
 //	Test9: RemoveMembership, unknown id.
 //
-//	The function shoiuld return false.
+//	The function should return false.
 //
 //****************************************************************************************
 void	Test9(Roster& roster)
@@ -603,11 +603,30 @@ string	VerifyRosterFile(const string& fileName, const StringVector& expectedText
 		{
 			//	Get a file line and check for end-of-file.
 			//	Set indicator and leave loop.
-			success = file.Read(actualText);
+			success = file.Read(actualFieldVector);
 			if (!success)
 			{
 				endOfFile = true;
 				break;
+			}
+			
+			//	Form an actual text contiguous string,
+			//	because that's what's in the rows of
+			//	the expected text vector.
+			uint32_t i = 0;
+			actualText.erase();
+			while (true)
+			{
+				actualText += actualFieldVector[i];
+				++i;
+				if (i < actualFieldVector.size())
+				{
+					actualText += '\t';
+				}
+				else
+				{
+					break;
+				}
 			}
 			
 			//	Compare actual and expected text.
