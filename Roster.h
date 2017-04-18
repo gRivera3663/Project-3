@@ -27,6 +27,9 @@ typedef string::size_type	StringSize;
 typedef vector<string>	StringVector;
 
 map<string, StringVector> Families;
+typedef map<string, StringVector>::iterator FamiliesIterator;
+typedef map<string, StringVector>::value_type FamiliesValue;
+
 
 class	MembershipFile
 {
