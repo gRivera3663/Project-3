@@ -434,7 +434,11 @@ void	Roster::ShowAllMemberships(ostream& stream)
 	//	EXECUTABLE STATEMENTS
     for(FamiliesIterator i = Families.begin(); i != Families.end(); i++)
     {
-        stream << "";
+        for (int i = idIndex;i < zipIndex;i++)
+        {
+            stream << &Families[to_string(i)] << "  ";
+        }
+        stream << endl;
     }
 }
 
