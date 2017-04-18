@@ -432,9 +432,10 @@ void	Roster::ShowAllMemberships(ostream& stream)
 
 	//************************************************************************************
 	//	EXECUTABLE STATEMENTS
-	//	COMPLETE THE FUNCTION HERE.
-
-	return;
+    for(FamiliesIterator i = Families.begin(); i != Families.end(); i++)
+    {
+        stream << "";
+    }
 }
 
 //****************************************************************************************
