@@ -355,7 +355,7 @@ bool	Roster::LoadMemberships(const string& fileName)
                     name = fieldVector[2];
                     UserInfo[2] = name;
                     
-                    line = fieldVector[3] + " " + fieldVector[4]; // address + city
+                    line = fieldVector[3] + '\t' + fieldVector[4]; // address + city
                     UserInfo[3] = fieldVector[3]; // address
                     UserInfo[4] = fieldVector[4]; // city
                     
@@ -438,7 +438,7 @@ void	Roster::ShowAllMemberships(ostream& stream)
         {
             for (int i = idIndex;i < zipIndex;i++)
             {
-                stream << &Families[to_string(i)] << "  ";
+                stream << &Families[to_string(i)] << '\t';
             }
             stream << endl;
         }
@@ -467,9 +467,20 @@ bool	Roster::ShowOneMembership(ostream& stream, const string& id)
 	
 	//************************************************************************************
 	//	EXECUTABLE STATEMENTS
-	//	COMPLETE THE FUNCTION HERE. MAKE SURE IT RETURNS THE CORRECT STATUS EVERYWHERE.
-
-	return(true);
+    if(Families.find(id) == Families.end())
+    {
+        stream << "Membership does not exist." << endl;
+        return(false);
+    }
+    else
+    {
+        for (int i = idIndex;i < zipIndex;i++)
+        {
+            stream << &Families[to_string(i)] << '\t';
+        }
+        stream << endl;
+        return(true);
+    }
 }
 
 //****************************************************************************************
@@ -487,9 +498,29 @@ bool	Roster::StoreMemberships(const string& fileName)
 	//************************************************************************************
 	//	LOCAL DATA
 	
+    ofstream OutputRoster;
+    
 	//************************************************************************************
 	//	EXECUTABLE STATEMENTS
 	//	COMPLETE THE FUNCTION HERE. MAKE SURE IT RETURNS THE CORRECT STATUS EVERYWHERE.
+    if(!Families.empty())
+    {
+        OutputRoster.open(fileName);
 
-	return(false);
+        for(FamiliesIterator i = Families.begin(); i != Families.end(); i++)
+        {
+            for (int i = idIndex;i < zipIndex;i++)
+            {
+                OutputRoster << &Families[to_string(i)] << '\t';
+            }
+            OutputRoster << endl;
+        }
+        OutputRoster.close();
+        return(true);
+    }
+    else
+    {
+        cout << "This file cannot be created." << endl;
+        return(false);
+    }
 }
