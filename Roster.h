@@ -25,7 +25,6 @@ typedef string::size_type	StringSize;
 
 typedef vector<string>	StringVector;
 
-typedef map<string, StringVector>::iterator FamiliesIterator;
 typedef map<string, StringVector>::value_type FamiliesValue;
 
 

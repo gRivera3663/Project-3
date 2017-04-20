@@ -301,13 +301,15 @@ bool	Roster::LoadMemberships(const string& fileName)
 	//************************************************************************************
 	//	LOCAL DATA
 	StringVector	fieldVector;
-	
+    
+    StringVector    UserInfo; // added
+
 	MembershipFile	file;
 
 	string			id;
 	
-	string			line;
-	
+	string			line; // for what?
+    
 	string			name;
 	
 	string			state;
@@ -317,8 +319,6 @@ bool	Roster::LoadMemberships(const string& fileName)
 	string			type;
 	
 	string			zip;
-    
-    string          tempID; // added
     
 	//************************************************************************************
 	//	EXECUTABLE STATEMENTS
@@ -330,42 +330,53 @@ bool	Roster::LoadMemberships(const string& fileName)
 			success = file.Read(fieldVector);
 			if (success)
 			{
-                StringVector UserInfo;
+                /*---
+                while(MembershipFile.read())
+                {
+                    if(myMap.find(id) == myMap.end)
+                        myMap[id] = ;//create new family object
+                    else
+                    {
+                        family f = myMap[id];
+                        // add person to f
+                        // myMap[id] = f;
+                    }
+                }
+                ---*/
                 
                 id = fieldVector[idIndex];
-                UserInfo[idIndex] = id;
-                
-                if (tempID == id)
+
+                if(Families.find(id) == Families.end())
                 {
-                    type = fieldVector[typeIndex];
-                    UserInfo[typeIndex] = type;
+                    UserInfo = *new StringVector;
                     
-                    name = fieldVector[nameIndex];
-                    UserInfo[nameIndex] = name;
+                    line = fieldVector[idIndex];
+                    
+                    for (int i = 1; i <= (kLongFieldCount-1); i++)
+                    {
+                        line = line + '\t' + fieldVector[i] ;
+                    }
+                    
+                    UserInfo.push_back(line);
+                    
+                    Families[id] = UserInfo;
                     
                 }
-                else
+                else // P or C
                 {
-                    tempID = id;
-                
-                    type = fieldVector[typeIndex];
-                    UserInfo[1] = type;
+                    line = fieldVector[idIndex];
                     
-                    name = fieldVector[2];
-                    UserInfo[2] = name;
+                    UserInfo = Families[id];
                     
-                    line = fieldVector[3] + '\t' + fieldVector[4]; // address + city
-                    UserInfo[3] = fieldVector[3]; // address
-                    UserInfo[4] = fieldVector[4]; // city
+                    for (int i = 1; i <= (kShortFieldCount-1); i++)
+                    {
+                        line = line + '\t' + fieldVector[i];
+                    }
                     
-                    state = fieldVector[5];
-                    UserInfo[5] = state;
+                    UserInfo.push_back(line);
                     
-                    zip = fieldVector[6];
-                    UserInfo[6] = zip;
+                    Families[id] = UserInfo;
                 }
-                
-                Families[id] = UserInfo;
 			}
 			else
 			{
@@ -433,18 +444,17 @@ void	Roster::ShowAllMemberships(ostream& stream)
 	//	EXECUTABLE STATEMENTS
     if(!Families.empty())
     {
-        for(FamiliesIterator i = Families.begin(); i != Families.end(); i++)
+        for(auto it = Families.begin(); it != Families.end(); it++)
         {
-            for (int i = idIndex;i < zipIndex;i++)
+            for (auto it2 = it->second.begin(); it2 != it->second.end(); it2++)
             {
-                stream << &Families[to_string(i)] << '\t';
+                stream << *it2 << endl;
             }
-            stream << endl;
         }
     }
     else
     {
-        stream << "empty" << endl;
+        stream << "empty";
     }
 }
 
@@ -506,7 +516,7 @@ bool	Roster::StoreMemberships(const string& fileName)
     {
         OutputRoster.open(fileName);
 
-        for(FamiliesIterator i = Families.begin(); i != Families.end(); i++)
+        for(map<string, StringVector>::iterator i = Families.begin(); i != Families.end(); i++)
         {
             for (int i = idIndex;i < zipIndex;i++)
             {
