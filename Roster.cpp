@@ -518,14 +518,14 @@ bool	Roster::StoreMemberships(const string& fileName)
     {
         OutputRoster.open(fileName);
 
-        for(map<string, StringVector>::iterator i = Families.begin(); i != Families.end(); i++)
+        for(auto it = Families.begin(); it != Families.end(); it++)
         {
-            for (int i = idIndex;i < zipIndex;i++)
+            for (auto it2 = it->second.begin(); it2 != it->second.end(); it2++)
             {
-                OutputRoster << &Families[to_string(i)] << '\t';
+                OutputRoster << *it2 << endl;
             }
-            OutputRoster << endl;
         }
+        
         OutputRoster.close();
         return(true);
     }
