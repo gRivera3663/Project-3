@@ -308,7 +308,7 @@ bool	Roster::LoadMemberships(const string& fileName)
 
 	string			id;
 	
-	string			line; // for what?
+	string			line;
     
 	string			name;
 	
@@ -330,20 +330,6 @@ bool	Roster::LoadMemberships(const string& fileName)
 			success = file.Read(fieldVector);
 			if (success)
 			{
-                /*---
-                while(MembershipFile.read())
-                {
-                    if(myMap.find(id) == myMap.end)
-                        myMap[id] = ;//create new family object
-                    else
-                    {
-                        family f = myMap[id];
-                        // add person to f
-                        // myMap[id] = f;
-                    }
-                }
-                ---*/
-                
                 id = fieldVector[idIndex];
 
                 if(Families.find(id) == Families.end())
