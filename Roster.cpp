@@ -476,6 +476,8 @@ bool	Roster::ShowOneMembership(ostream& stream, const string& id)
 	
 	//************************************************************************************
 	//	EXECUTABLE STATEMENTS
+    map<string, StringVector>::const_iterator pos = Families.find(id);
+
     if(Families.find(id) == Families.end())
     {
         stream << "Membership does not exist." << endl;
@@ -483,11 +485,11 @@ bool	Roster::ShowOneMembership(ostream& stream, const string& id)
     }
     else
     {
-        for (int i = idIndex;i < zipIndex;i++)
+        for(StringVector::const_iterator it = pos->second.begin(); it != pos->second.end(); it++)
         {
-            stream << &Families[to_string(i)] << '\t';
+            stream << *it << endl;
         }
-        stream << endl;
+        
         return(true);
     }
 }
